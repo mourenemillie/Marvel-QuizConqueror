@@ -5,10 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.ShoppingBag
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,9 +25,9 @@ import com.example.marvelquizconqueror.core.theme.CardLighter
 import com.example.marvelquizconqueror.core.theme.TextWhite
 
 sealed class BottomNavItem(val title: String, val icon: ImageVector, val route: String) {
-    object Dunia : BottomNavItem("DUNIA", Icons.Default.Language, "dunia")
-    object Hero : BottomNavItem("HERO", Icons.Default.Security, "hero")
-    object Toko : BottomNavItem("TOKO", Icons.Default.ShoppingBag, "toko")
+    object Dunia : BottomNavItem("DUNIA", Icons.Default.Place, "dunia")
+    object Hero : BottomNavItem("HERO", Icons.Default.Star, "hero")
+    object Toko : BottomNavItem("TOKO", Icons.Default.ShoppingCart, "toko")
     object Profil : BottomNavItem("PROFIL", Icons.Default.Person, "profil")
 }
 
