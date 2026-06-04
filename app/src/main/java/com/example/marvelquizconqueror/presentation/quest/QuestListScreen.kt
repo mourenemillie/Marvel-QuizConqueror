@@ -2,6 +2,7 @@ package com.example.marvelquizconqueror.presentation.quest
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,16 +26,20 @@ import androidx.compose.ui.unit.sp
 import com.example.marvelquizconqueror.core.theme.*
 import com.example.marvelquizconqueror.domain.model.Quest
 import com.example.marvelquizconqueror.domain.model.User
+import com.example.marvelquizconqueror.presentation.common.MarvelBottomNav
 import com.example.marvelquizconqueror.presentation.common.MarvelTopBar
 
 @Composable
 fun QuestListScreen(
     user: User,
     quests: List<Quest>,
+    onQuestClick: (Quest) -> Unit,
+    onNavigate: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = { MarvelTopBar(user = user) },
+        bottomBar = { MarvelBottomNav(currentRoute = "dunia", onNavigate = onNavigate) },
         containerColor = BackgroundDark,
         modifier = modifier.fillMaxSize()
     ) { innerPadding ->
@@ -51,7 +56,7 @@ fun QuestListScreen(
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Black,
                 letterSpacing = 2.sp,
-                modifier = Modifier.padding(bottom = 12.dp) // Added red shadow/glow in real implementation
+                modifier = Modifier.padding(bottom = 12.dp)
             )
 
             // Sector Progress
@@ -106,7 +111,7 @@ fun QuestListScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(quests) { quest ->
-                    QuestItem(quest = quest)
+                    QuestItem(quest = quest, onClick = { onQuestClick(quest) })
                 }
             }
         }
@@ -114,7 +119,7 @@ fun QuestListScreen(
 }
 
 @Composable
-fun QuestItem(quest: Quest) {
+fun QuestItem(quest: Quest, onClick: () -> Unit) {
     val backgroundColor = if (quest.isSuperHard) RedPrimary else if (quest.isLocked) Color(0xFF424242) else CardDark
     val textColor = if (quest.isSuperHard) Color.White else if (quest.isLocked) Color.Gray else TextWhite
     val borderColor = if (quest.isSuperHard) Color(0xFFFF8A80) else Color.Transparent
@@ -129,6 +134,7 @@ fun QuestItem(quest: Quest) {
                 color = borderColor,
                 shape = RoundedCornerShape(8.dp)
             )
+            .clickable(enabled = !quest.isLocked) { onClick() }
             .padding(16.dp)
     ) {
         Row(

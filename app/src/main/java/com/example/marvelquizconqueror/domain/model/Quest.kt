@@ -8,5 +8,6 @@ data class Quest(
     val tags: List<String>,
     val isCompleted: Boolean = false,
     val isLocked: Boolean = false,
-    val isSuperHard: Boolean = false
+    val isSuperHard: Boolean = false,
+    val imageResId: Int? = null
 )

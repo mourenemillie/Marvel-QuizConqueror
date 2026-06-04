@@ -22,6 +22,10 @@ import com.example.marvelquizconqueror.domain.model.User
 
 @Composable
 fun MarvelTopBar(user: User, modifier: Modifier = Modifier) {
+    // Logic for XP progress (example: 1000 XP per level)
+    val xpInCurrentLevel = user.xp % 1000
+    val xpProgress = xpInCurrentLevel / 1000f
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -75,7 +79,7 @@ fun MarvelTopBar(user: User, modifier: Modifier = Modifier) {
                 color = RedPrimary,
                 fontWeight = FontWeight.Bold,
                 fontSize = 12.sp,
-                maxLines = 2
+                maxLines = 1
             )
             Spacer(modifier = Modifier.height(4.dp))
             // Progress Bar
@@ -88,7 +92,7 @@ fun MarvelTopBar(user: User, modifier: Modifier = Modifier) {
             ) {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(0.6f) // Hardcoded 60% progress
+                        .fillMaxWidth(xpProgress)
                         .fillMaxHeight()
                         .background(BluePrimary)
                 )
