@@ -9,5 +9,6 @@ data class Quest(
     val isCompleted: Boolean = false,
     val isLocked: Boolean = false,
     val isSuperHard: Boolean = false,
-    val imageResId: Int? = null
+    val imageResId: Int? = null,
+    val villainImageId: Int? = null
 )

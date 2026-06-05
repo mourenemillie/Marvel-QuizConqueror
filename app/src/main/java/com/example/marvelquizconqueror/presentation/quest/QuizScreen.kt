@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +35,7 @@ fun QuizScreen(
     user: User,
     questTitle: String,
     imageResId: Int?,
+    villainImageId: Int?,
     questions: List<Question>,
     onFinish: (Int, Int) -> Unit,
     onRevive: () -> Boolean, // Fungsi untuk memproses pembayaran topup
@@ -42,13 +44,16 @@ fun QuizScreen(
     var currentQuestionIndex by remember { mutableStateOf(0) }
     var score by remember { mutableStateOf(0) }
     var lives by remember { mutableStateOf(3) }
+    var villainHealth by remember { mutableStateOf(100f) }
     var isGameOver by remember { mutableStateOf(false) }
     var isVictory by remember { mutableStateOf(false) }
 
     val currentQuestion = questions.getOrNull(currentQuestionIndex)
+    val damagePerQuestion = 100f / questions.size
 
     if (isGameOver || isVictory) {
         QuizResultScreen(
+            user = user,
             isVictory = isVictory,
             score = score,
             coinsGained = if (isVictory) 20 else 0,
@@ -84,6 +89,17 @@ fun QuizScreen(
                         fontSize = 18.sp
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
+                        // User Hero Image
+                        Image(
+                            painter = painterResource(id = user.selectedHeroImageId ?: R.drawable.hero_figure),
+                            contentDescription = "Selected Hero",
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clip(CircleShape)
+                                .border(1.dp, GoldYellow, CircleShape),
+                            contentScale = ContentScale.Crop
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
                         repeat(3) { index ->
                             Icon(
                                 imageVector = Icons.Default.Favorite,
@@ -104,11 +120,11 @@ fun QuizScreen(
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Environment Image
+                    // Environment & Combat Area
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(220.dp)
+                            .height(260.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .background(CardDark),
                         contentAlignment = Alignment.Center
@@ -124,6 +140,40 @@ fun QuizScreen(
                                 .fillMaxSize()
                                 .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.7f))))
                         )
+
+                        // Villain Image & Health Bar
+                        Column(
+                            modifier = Modifier.align(Alignment.Center),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            // Villain Health Bar
+                            Box(
+                                modifier = Modifier
+                                    .width(120.dp)
+                                    .height(8.dp)
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .background(Color.Gray.copy(alpha = 0.5f))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(villainHealth / 100f)
+                                        .fillMaxHeight()
+                                        .background(Color.Red)
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Image(
+                                painter = painterResource(id = villainImageId ?: R.drawable.red_skull),
+                                contentDescription = "Villain",
+                                modifier = Modifier
+                                    .size(150.dp)
+                                    .graphicsLayer {
+                                        // Optional: Add some animation or effect
+                                    },
+                                contentScale = ContentScale.Fit
+                            )
+                        }
+
                         Text(
                             text = "PERTANYAAN ${currentQuestionIndex + 1}/${questions.size}",
                             color = TextWhite,
@@ -163,9 +213,12 @@ fun QuizScreen(
                                 onClick = {
                                     if (index == currentQuestion.correctAnswerIndex) {
                                         score += 50
+                                        villainHealth -= damagePerQuestion
                                         if (currentQuestionIndex < questions.size - 1) {
                                             currentQuestionIndex++
                                         } else {
+                                            // Semua soal terjawab benar, villain darahnya 0
+                                            villainHealth = 0f
                                             isVictory = true
                                         }
                                     } else {
@@ -175,6 +228,8 @@ fun QuizScreen(
                                         } else if (currentQuestionIndex < questions.size - 1) {
                                             currentQuestionIndex++
                                         } else {
+                                            // Soal terakhir tapi salah jawab, darah villain tidak berkurang 
+                                            // tapi soal sudah habis, user tetap menang jika masih ada nyawa
                                             isVictory = true
                                         }
                                     }
@@ -190,6 +245,7 @@ fun QuizScreen(
 
 @Composable
 fun QuizResultScreen(
+    user: User,
     isVictory: Boolean,
     score: Int,
     coinsGained: Int,
@@ -198,9 +254,15 @@ fun QuizResultScreen(
     onRevive: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize().background(BackgroundDark)) {
-        // Hero Background
+        // Hero Background - Use selected hero for victory, otherwise fallback
         Image(
-            painter = painterResource(id = if (isVictory) R.drawable.hero_figure else R.drawable.captain_amerika),
+            painter = painterResource(
+                id = if (isVictory) {
+                    user.selectedHeroImageId ?: R.drawable.hero_figure
+                } else {
+                    R.drawable.captain_amerika
+                }
+            ),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,

@@ -6,5 +6,6 @@ data class User(
     val xp: Int,
     val coins: Int,
     val energy: Int,
-    val profileImageId: Int? = null
+    val profileImageId: Int? = null,
+    val selectedHeroImageId: Int? = null
 )

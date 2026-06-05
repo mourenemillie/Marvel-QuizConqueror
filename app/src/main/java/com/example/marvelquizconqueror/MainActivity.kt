@@ -65,25 +65,30 @@ fun MarvelQuestApp() {
     }
 
     val mockQuests = listOf(
-        Quest("1", "01", "KOTA TERKUNCI", 1, listOf("EASY"), imageResId = R.drawable.tempat_newyork),
-        Quest("2", "02", "LABORATORIUM RAHASIA", 2, listOf("MEDIUM"), imageResId = R.drawable.tempat_lab),
-        Quest("3", "03", "HUTAN TERLARANG", 3, listOf("HARD"), imageResId = R.drawable.tempat_hutan),
-        Quest("4", "04", "KASTEL DOOM", 2, listOf("MEDIUM"), imageResId = R.drawable.tempat_kastel),
-        Quest("5", "05", "MARKAS PLANET", 4, listOf("EXPERT"), imageResId = R.drawable.tempat_planet),
-        Quest("6", "06", "GERBANG GALAXY", 5, emptyList(), isSuperHard = true, imageResId = R.drawable.tempat_galaxy)
+        Quest("1", "01", "KOTA TERKUNCI", 1, listOf("EASY"), imageResId = R.drawable.tempat_newyork, villainImageId = R.drawable.red_skull),
+        Quest("2", "02", "LABORATORIUM RAHASIA", 2, listOf("MEDIUM"), imageResId = R.drawable.tempat_lab, villainImageId = R.drawable.dr_doom),
+        Quest("3", "03", "HUTAN TERLARANG", 3, listOf("HARD"), imageResId = R.drawable.tempat_hutan, villainImageId = R.drawable.hela),
+        Quest("4", "04", "KASTEL DOOM", 2, listOf("MEDIUM"), imageResId = R.drawable.tempat_kastel, villainImageId = R.drawable.mysterio),
+        Quest("5", "05", "MARKAS PLANET", 4, listOf("EXPERT"), imageResId = R.drawable.tempat_planet, villainImageId = R.drawable.kang_the_conqueror),
+        Quest("6", "06", "GERBANG GALAXY", 5, emptyList(), isSuperHard = true, imageResId = R.drawable.tempat_galaxy, villainImageId = R.drawable.thanos)
     )
 
     val mockQuestions = listOf(
-        Question("1", "Siapa identitas asli Iron Man?", listOf("Tony Stark", "Steve Rogers", "Bruce Banner", "Thor"), 0, "General"),
-        Question("2", "Apa senjata utama Thor?", listOf("Perisai", "Mjolnir", "Busur Panah", "Web Shooter"), 1, "General"),
-        Question("3", "Siapa musuh bebuyutan Captain America di Perang Dunia II?", listOf("Thanos", "Loki", "Red Skull", "Ultron"), 2, "History"),
-        Question("4", "Warna batu Mind Stone adalah?", listOf("Merah", "Biru", "Kuning", "Hijau"), 2, "Items"),
-        Question("5", "Siapa raja dari Wakanda?", listOf("T'Challa", "M'Baku", "Erik Killmonger", "W'Kabi"), 0, "Geography"),
-        Question("6", "Siapa paman Spider-Man yang memberikan pesan 'Power and Responsibility'?", listOf("Uncle Sam", "Uncle Ben", "Uncle Bob", "Uncle Phil"), 1, "Characters"),
-        Question("7", "Apa nama planet asal Thanos?", listOf("Earth", "Titan", "Xandar", "Sakaar"), 1, "Cosmic"),
-        Question("8", "Siapa anggota Avengers yang ahli memanah?", listOf("Hawkeye", "Black Widow", "Falcon", "Ant-Man"), 0, "Characters"),
-        Question("9", "Apa nama AI yang diciptakan Tony Stark sebelum JARVIS?", listOf("FRIDAY", "EDITH", "JARVIS", "Homer"), 2, "Tech"),
-        Question("10", "Siapa yang menghancurkan perisai Captain America di Endgame?", listOf("Loki", "Thanos", "Ultron", "Hela"), 1, "Movies")
+        Question("1", "Apa satuan internasional (SI) untuk besaran suhu?", listOf("Celsius", "Fahrenheit", "Kelvin", "Reamur"), 2, "Fisika"),
+        Question("2", "Bagian sel yang berfungsi sebagai tempat respirasi sel adalah?", listOf("Inti sel", "Mitokondria", "Ribosom", "Lisosom"), 1, "Biologi"),
+        Question("3", "Perubahan wujud zat dari gas menjadi padat disebut?", listOf("Mencair", "Menguap", "Mengkristal", "Menyublim"), 2, "Kimia"),
+        Question("4", "Planet yang dijuluki sebagai planet merah adalah?", listOf("Venus", "Mars", "Jupiter", "Saturnus"), 1, "Astronomi"),
+        Question("5", "Alat yang digunakan untuk mengukur tekanan udara adalah?", listOf("Termometer", "Higrometer", "Barometer", "Anemometer"), 2, "Fisika"),
+        Question("6", "Enzim yang berfungsi mengubah amilum menjadi glukosa di dalam mulut adalah?", listOf("Pepsin", "Ptialin", "Lipase", "Renin"), 1, "Biologi"),
+        Question("7", "Zat yang menyebabkan warna hijau pada daun disebut?", listOf("Hemoglobin", "Klorofil", "Melanin", "Karoten"), 1, "Biologi"),
+        Question("8", "Bunyi yang frekuensinya lebih dari 20.000 Hz disebut?", listOf("Infrasonik", "Audiosonik", "Ultrasonik", "Supersonik"), 2, "Fisika"),
+        Question("9", "Simbol kimia untuk unsur besi adalah?", listOf("Au", "Ag", "Fe", "Cu"), 2, "Kimia"),
+        Question("10", "Hubungan antara dua makhluk hidup yang saling menguntungkan disebut?", listOf("Simbiosis Parasitisme", "Simbiosis Komensalisme", "Simbiosis Mutalisme", "Predasi"), 2, "Biologi"),
+        Question("11", "Proses penguapan air melalui pori-pori daun tumbuhan disebut?", listOf("Fotosintesis", "Transpirasi", "Respirasi", "Oksidasi"), 1, "Biologi"),
+        Question("12", "Hukum yang menyatakan bahwa gaya berbanding lurus dengan massa dan percepatan adalah?", listOf("Hukum Newton I", "Hukum Newton II", "Hukum Newton III", "Hukum Archimedes"), 1, "Fisika"),
+        Question("13", "Asam lambung (HCl) berfungsi untuk?", listOf("Mencerna lemak", "Membunuh kuman", "Mengaktifkan ptyalin", "Menyerap air"), 1, "Biologi"),
+        Question("14", "Benda yang dapat ditarik kuat oleh magnet disebut?", listOf("Paramagnetik", "Diamagnetik", "Feromagnetik", "Nonmagnetik"), 2, "Fisika"),
+        Question("15", "Lapisan atmosfer yang paling dekat dengan bumi adalah?", listOf("Stratosfer", "Mesosfer", "Troposfer", "Eksosfer"), 2, "Astronomi")
     )
 
     NavHost(navController = navController, startDestination = "login") {
@@ -91,7 +96,13 @@ fun MarvelQuestApp() {
             LoginScreen(onNavigateToHeroSelection = { navController.navigate("hero") })
         }
         composable("hero") {
-            HeroSelectionScreen(user = user, onNavigate = { route -> navController.navigate(route) })
+            HeroSelectionScreen(
+                user = user,
+                onHeroSelected = { hero ->
+                    user = user.copy(selectedHeroImageId = hero.imageResId)
+                },
+                onNavigate = { route -> navController.navigate(route) }
+            )
         }
         composable("dunia") {
             WorldSelectionScreen(
@@ -123,6 +134,7 @@ fun MarvelQuestApp() {
                 user = user,
                 questTitle = quest.title,
                 imageResId = quest.imageResId,
+                villainImageId = quest.villainImageId,
                 questions = mockQuestions.shuffled().take(5),
                 onFinish = { score, coinsGained ->
                     user = user.copy(

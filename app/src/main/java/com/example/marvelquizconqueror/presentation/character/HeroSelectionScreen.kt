@@ -38,6 +38,7 @@ import kotlin.math.absoluteValue
 @Composable
 fun HeroSelectionScreen(
     user: User,
+    onHeroSelected: (Hero) -> Unit,
     onNavigate: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -99,8 +100,11 @@ fun HeroSelectionScreen(
                 modifier = Modifier.weight(1f)
             ) { page ->
                 val hero = heroes[page]
+                val isSelected = user.selectedHeroImageId == hero.imageResId
                 HeroCard(
                     hero = hero,
+                    isSelected = isSelected,
+                    onSelect = { onHeroSelected(hero) },
                     modifier = Modifier.graphicsLayer {
                         val pageOffset = (
                                 (pagerState.currentPage - page) + pagerState
@@ -151,25 +155,30 @@ fun HeroSelectionScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            val selectedHero = heroes[pagerState.currentPage]
-            
             Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)) {
                 Button(
                     onClick = { onNavigate("quest_list") },
+                    enabled = user.selectedHeroImageId != null,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
                         .background(
-                            Brush.horizontalGradient(
-                                colors = listOf(Color(0xFFFF5252), Color(0xFFFF8A80))
-                            ),
+                            if (user.selectedHeroImageId != null) {
+                                Brush.horizontalGradient(
+                                    colors = listOf(Color(0xFFFF5252), Color(0xFFFF8A80))
+                                )
+                            } else {
+                                Brush.horizontalGradient(
+                                    colors = listOf(Color.Gray, Color.DarkGray)
+                                )
+                            },
                             shape = RoundedCornerShape(8.dp)
                         ),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text(
-                        text = "KONFIRMASI ${selectedHero.name}",
+                        text = if (user.selectedHeroImageId != null) "MULAI PETUALANGAN" else "PILIH HERO DAHULU",
                         color = Color.Black,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp
@@ -182,13 +191,22 @@ fun HeroSelectionScreen(
 }
 
 @Composable
-fun HeroCard(hero: Hero, modifier: Modifier = Modifier) {
+fun HeroCard(
+    hero: Hero,
+    isSelected: Boolean,
+    onSelect: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .clip(RoundedCornerShape(24.dp))
-            .border(2.dp, RedPrimary, RoundedCornerShape(24.dp))
+            .border(
+                width = if (isSelected) 4.dp else 2.dp,
+                color = if (isSelected) GoldYellow else RedPrimary,
+                shape = RoundedCornerShape(24.dp)
+            )
             .background(CardDark)
     ) {
         Image(
@@ -215,16 +233,36 @@ fun HeroCard(hero: Hero, modifier: Modifier = Modifier) {
                 .align(Alignment.BottomStart)
                 .padding(24.dp)
         ) {
-            Text(
-                text = hero.role,
-                color = TextWhite,
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .background(BluePrimary)
-                    .padding(horizontal = 10.dp, vertical = 4.dp)
-                    .clip(RoundedCornerShape(4.dp))
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = hero.role,
+                    color = TextWhite,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .background(BluePrimary)
+                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                )
+
+                if (isSelected) {
+                    Text(
+                        text = "TERPILIH",
+                        color = Color.Black,
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Black,
+                        modifier = Modifier
+                            .background(GoldYellow)
+                            .padding(horizontal = 10.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                    )
+                }
+            }
+            
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = hero.name,
@@ -240,7 +278,25 @@ fun HeroCard(hero: Hero, modifier: Modifier = Modifier) {
                 fontSize = 14.sp,
                 lineHeight = 20.sp
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // Pilih Hero Button on Card
+            Button(
+                onClick = onSelect,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isSelected) Color.Gray else RedPrimary
+                ),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.fillMaxWidth().height(40.dp)
+            ) {
+                Text(
+                    text = if (isSelected) "HERO TERPILIH" else "PILIH HERO",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
